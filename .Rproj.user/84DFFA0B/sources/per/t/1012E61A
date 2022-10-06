@@ -1,0 +1,26 @@
+{
+    "id": "1012E61A",
+    "path": "C:/GitHub/MDE-monthly-report-graphics/scripts/stats_england.r",
+    "project_path": "scripts/stats_england.r",
+    "type": "r_source",
+    "hash": "636532222",
+    "contents": "",
+    "dirty": false,
+    "created": 1657647494234.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "126,0",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1656074440,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1656074440,
+    "read_only": false,
+    "read_only_alternatives": []
+}

@@ -1,0 +1,26 @@
+{
+    "id": "7B3BA4B3",
+    "path": "C:/GitHub/MDE-monthly-report-graphics/scripts/stats_mentalhealthtr.r",
+    "project_path": "scripts/stats_mentalhealthtr.r",
+    "type": "r_source",
+    "hash": "1355672087",
+    "contents": "",
+    "dirty": false,
+    "created": 1657647564990.0,
+    "source_on_save": false,
+    "relative_order": 3,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "9,42",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1656074440,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1656074440,
+    "read_only": false,
+    "read_only_alternatives": []
+}

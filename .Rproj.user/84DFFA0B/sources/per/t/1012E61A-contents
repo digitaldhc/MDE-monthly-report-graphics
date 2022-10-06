@@ -38,7 +38,7 @@ colour_topquartile <- "darkgreen"
 # IMPORT DATA ----
 
 # Import monthly data
-atp_stats_long_monthly <- readRDS("atp_stats_long_monthbymonth_server.rds")
+atp_stats_long_monthly <- readRDS("atp_stats_long_monthbymonth.rds")
 
 # MUNGE DATA ----
 
@@ -56,15 +56,15 @@ my_trust <- atp_stats_long_monthly %>%
 # NHS Trust average dataset
 averages <- atp_stats_long_monthly %>%
   group_by(month) %>%
-  summarise(cyber_score_mean = mean(cyber_score_server, na.rm = TRUE))
+  summarise(cyber_score_mean = mean(cyber_score, na.rm = TRUE))
 
 # NHS Trust top quartile dataset
 topquartile <- atp_stats_long_monthly %>%
   group_by(month) %>%
-  summarise(top_quartile = quantile(cyber_score_server, probs = 0.25, na.rm = TRUE))
+  summarise(top_quartile = quantile(cyber_score, probs = 0.25, na.rm = TRUE))
 
 # Create latest score variables from these subsets to use in the data plot
-latest_my_trust <- head(my_trust$cyber_score_server, 1)
+latest_my_trust <- head(my_trust$cyber_score, 1)
 latest_average <- tail(averages$cyber_score_mean, 1)
 latest_quartile <- tail(topquartile$top_quartile, 1)
 
@@ -87,11 +87,11 @@ plot_labels_right <- data.table(labels_right_x = labels_right_x, labels_right_y 
 # Create the plot
 atp_stats_plot <- ggplot() + 
   # background data
-  geom_line(data = atp_stats_long_monthly, aes(x = month, y = cyber_score_server, group = ods, colour = ods), colour = alpha("grey75", 0.7)) + 
+  geom_line(data = atp_stats_long_monthly, aes(x = month, y = cyber_score, group = ods, colour = ods), colour = alpha("grey75", 0.7)) + 
   # average line
   geom_line(data = averages, aes(x = month, y = cyber_score_mean), colour = colour_average, size = 1.5) +
   # My Trust line
-  geom_line(data = my_trust, aes(x = month, y = cyber_score_server, group = ods, colour = my_trust), colour = colour_my_trust, size = 2) +
+  geom_line(data = my_trust, aes(x = month, y = cyber_score, group = ods, colour = my_trust), colour = colour_my_trust, size = 2) +
   # top quartile line
   geom_line(data = topquartile, aes(x = month, y = top_quartile), colour = colour_topquartile, size = 1.5) +
   # exposure score lines
@@ -101,15 +101,15 @@ atp_stats_plot <- ggplot() +
   # left hand side labels
   geom_label(data = plot_labels_left, aes(x = labels_left_x, y = labels_left_y, label = labels_left_text, group = NULL, hjust = "left"), fill = plot_labels_left$labels_left_colour, colour = "white", fontface = "bold", size = 5, nudge_x = 10) +
   # right hand side labels
-  geom_label_repel(data = plot_labels_right, aes(x = labels_right_x, y = labels_right_y, label = labels_right_text, group = NULL, hjust = "left"), colour = plot_labels_right$labels_right_colour, fontface = "bold", size = 3, nudge_x = 2.5) +
+  geom_text(data = plot_labels_right, aes(x = labels_right_x, y = labels_right_y, label = labels_right_text, group = NULL, hjust = "left"), colour = plot_labels_right$labels_right_colour, fontface = "bold", size = 3, nudge_x = 2.5) +
   # axis settings
-  scale_x_date(date_labels = "%b %y", date_breaks = "1 month", expand = expansion(mult = c(0, .08))) +
+  scale_x_date(date_labels = "%b %y", date_breaks = "2 months", expand = expansion(mult = c(0, .08))) +
   scale_y_continuous(breaks = c(20, 40, 60, 80, 100), limits = c(0,100)) +
   # axis labels
   xlab("Month") +
   ylab("Exposure score") +
   # plot title and subtitle
-  ggtitle(paste("Cyber exposure scores for servers - NHS Trusts - May 2021 to", current_month_print, sep = " "), subtitle = "Data supplied by the NHS Digital Data Security Centre") +
+  ggtitle(paste("Cyber exposure scores for endpoints - NHS Trusts - January 2020 to", current_month_print, sep = " "), subtitle = "Data supplied by the NHS Digital Data Security Centre") +
   # plot theme
   theme_base() +
   theme(
@@ -120,7 +120,7 @@ atp_stats_plot <- ggplot() +
 # Draw the plot
 atp_stats_plot 
 
-`# EXPORT DATA ----
+# EXPORT DATA ----
 
 # Export plot png - A4 size
-ggsave("atp_stats_server.png", width = 33.867, height = 19.05, units = "cm")
+ggsave("atp_stats.png", width = 33.867, height = 19.05, units = "cm")
