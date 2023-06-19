@@ -120,6 +120,10 @@ plot_labels_right <- data.table(labels_right_x = labels_right_x, labels_right_y 
 
 # Create the plot
 atp_stats_plot <- ggplot() + 
+  # background rectangles
+  annotate("rect", xmin = labels_left_x, xmax = current_month, ymin = -Inf, ymax = 29, fill = "lightskyblue1", alpha = .6, color = NA) +
+  annotate("rect", xmin = labels_left_x, xmax = current_month, ymin = 29, ymax = 69, fill = "navajowhite", alpha = .6, color = NA) +
+  annotate("rect", xmin = labels_left_x, xmax = current_month, ymin = 69, ymax = Inf, fill = "salmon1", alpha = .6, color = NA) +
   # background data - commented out but you could turn this on
   # geom_line(data = atp_stats_long_monthly, aes(x = month, y = cyber_score, group = ods, colour = ods), colour = alpha(colour_backgroundorgs, 0.7)) + 
   # average line - commented out but you could turn this on
@@ -148,7 +152,7 @@ atp_stats_plot <- ggplot() +
   xlab("Month") +
   ylab("Exposure score") +
   # plot title and subtitle
-  ggtitle(paste("Cyber exposure scores for Dorset NHS Trusts - January 2020 to", current_month_print, sep = " "), subtitle = "Data supplied by the NHS Digital Data Security Centre") +
+  ggtitle(paste("Cyber exposure scores for endpoints - Dorset NHS Trusts - January 2020 to", current_month_print, sep = " "), subtitle = "Data supplied by the NHS Digital Data Security Centre") +
   # plot theme
   theme_base() +
   theme(

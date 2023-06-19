@@ -28,7 +28,7 @@ my_ods <- "RDY"
 setwd("c:/b/atp_stats")
 
 # Set plot colours
-colour_backgroundorgs <- "seagreen2"
+colour_backgroundorgs <- "seagreen3"
 colour_highexposurescore <- "firebrick2"
 colour_mediumexposurescore <- "sienna2"
 colour_lowexposurescore <- "royalblue3"
@@ -91,6 +91,10 @@ plot_labels_right <- data.table(labels_right_x = labels_right_x, labels_right_y 
 
 # Create the plot
 atp_stats_plot <- ggplot() + 
+  # background rectangles
+  annotate("rect", xmin = labels_left_x, xmax = current_month, ymin = -Inf, ymax = 29, fill = "lightskyblue1", alpha = .6, color = NA) +
+  annotate("rect", xmin = labels_left_x, xmax = current_month, ymin = 29, ymax = 69, fill = "navajowhite", alpha = .6, color = NA) +
+  annotate("rect", xmin = labels_left_x, xmax = current_month, ymin = 69, ymax = Inf, fill = "salmon1", alpha = .6, color = NA) +
   # background data
   geom_line(data = subset_btr, aes(x = month, y = cyber_score, group = ods, colour = ods), colour = alpha(colour_backgroundorgs, 0.7)) + 
   # average line
