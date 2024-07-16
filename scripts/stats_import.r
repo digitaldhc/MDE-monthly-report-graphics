@@ -11,10 +11,10 @@
 setwd("c:/b/atp_stats")
 
 # set the date for the first of the month in the spreadsheet you are importing
-month_import <- "2023-04-01"
+month_import <- "2024-05-01"
 
 # set the path to the spreadsheet
-excel_path <- "raw/2023-04.xlsx"
+excel_path <- "raw/2024-05.xlsx"
 
 # INSTALL PACKAGES ----
 
@@ -69,3 +69,4 @@ atp_stats_long_monthly <- rbind(atp_sheet_raw, atp_stats_long_import)
 
 # Save the resulting dataset back to the monthly file
 saveRDS(atp_stats_long_monthly, file = "atp_stats_long_monthbymonth.rds")
+

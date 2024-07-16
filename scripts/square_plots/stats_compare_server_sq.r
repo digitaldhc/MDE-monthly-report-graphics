@@ -17,7 +17,8 @@ pacman::p_load(
   data.table,
   ggrepel,
   ggthemes,
-  ggtext
+  ggtext,
+  lubridate
 )
 
 # SET COMMON VARIABLES ----
@@ -52,9 +53,13 @@ colour_comparator_4 <- "gray20"
 # IMPORT DATA ----
 
 # Import monthly data
-atp_stats_long_monthly <- readRDS("atp_stats_long_monthbymonth_server.rds")
+atp_stats_long_monthly_read <- readRDS("atp_stats_long_monthbymonth_server.rds")
 
 # MUNGE DATA ----
+
+# cut down data to show last six months
+atp_stats_long_monthly <- subset(atp_stats_long_monthly_read, atp_stats_long_monthly_read$month > lubridate::today() - lubridate::days(180))
+
 
 # Set the various data strings we'll need
 current_month <- head(atp_stats_long_monthly$month, 1) # current month for label plotting
@@ -142,22 +147,22 @@ atp_stats_plot <- ggplot() +
   geom_hline(yintercept = 69, linetype = "dotted", colour = colour_mediumexposurescore, size = 2) +
   geom_hline(yintercept = 100, linetype = "dotted", colour = colour_highexposurescore, size = 2) +
   # left hand side labels
-  geom_label(data = plot_labels_left, aes(x = labels_left_x, y = labels_left_y, label = labels_left_text, group = NULL, hjust = "left"), fill = plot_labels_left$labels_left_colour, colour = "white", fontface = "bold", size = 5, nudge_x = 10) +
+  geom_label(data = plot_labels_left, aes(x = labels_left_x, y = labels_left_y, label = labels_left_text, group = NULL, hjust = "left"), fill = plot_labels_left$labels_left_colour, colour = "white", fontface = "bold", size = 5, nudge_x = 1) +
   # right hand side labels
-  geom_text(data = plot_labels_right, aes(x = labels_right_x, y = labels_right_y, label = labels_right_text, group = NULL, hjust = "left"), colour = plot_labels_right$labels_right_colour, fontface = "bold", size = 3, nudge_x = 2.5) +
+  geom_text(data = plot_labels_right, aes(x = labels_right_x, y = labels_right_y, label = labels_right_text, group = NULL, hjust = "left"), colour = plot_labels_right$labels_right_colour, fontface = "bold", size = 3, nudge_x = 0.5) +
   # axis settings
-  scale_x_date(date_labels = "%b %y", date_breaks = "2 months", expand = expansion(mult = c(0, .08))) +
+  scale_x_date(date_labels = "%b %y", date_breaks = "1 month", expand = expansion(mult = c(0, .08))) +
   scale_y_continuous(breaks = c(20, 40, 60, 80, 100), limits = c(0,100)) +
   # axis labels
   xlab("Month") +
   ylab("Exposure score") +
   # plot title and subtitle
-  ggtitle(paste("Cyber exposure scores for servers - Dorset NHS Trusts - May 2021 to", current_month_print, sep = " "), subtitle = "Data supplied by the NHS Digital Data Security Centre") +
+  ggtitle(paste("Cyber exposure scores for servers <br>Dorset NHS Trusts"), subtitle = "Data supplied by the NHS Digital Data Security Centre") +
   # plot theme
   theme_base() +
   theme(
     axis.text.x = element_text(angle = 00, size = 9),
-    plot.title = element_text(size = 20, family = "Helvetica", face = "bold"),
+    plot.title = element_markdown(size = 20, family = "Arial", face = "bold"),
     plot.subtitle = element_markdown(hjust = 0, vjust = 0, size = 11))
 
 # Draw the plot
@@ -166,4 +171,4 @@ atp_stats_plot
 # EXPORT DATA ----
 
 # Export plot png - A4 size
-ggsave("atp_stats_comparator_server.png", width = 33.867, height = 19.05, units = "cm")
+ggsave("sq_atp_stats_comparator_server.png", width = 15, height = 15, units = "cm")
