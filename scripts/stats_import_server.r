@@ -11,10 +11,10 @@
 setwd("c:/b/atp_stats")
 
 # set the date for the first of the month in the spreadsheet you are importing
-month_import <- "2024-05-01"
+month_import <- "2024-12-01"
 
 # set the path to the spreadsheet
-excel_path <- "raw/2024-05.xlsx"
+excel_path <- "raw/2024-12.xlsx"
 
 # INSTALL PACKAGES ----
 
@@ -27,7 +27,7 @@ pacman::p_load(
   tidyr,
   ggplot2,
   dplyr,
-  zoo,
+#  zoo,
   data.table
 )
 

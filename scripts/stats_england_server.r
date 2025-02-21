@@ -12,8 +12,9 @@ pacman::p_load(
   tidyr,
   ggplot2,
   dplyr,
-  zoo,
+#  zoo,
   data.table,
+  lubridate,
   ggrepel,
   ggthemes,
   ggtext
@@ -31,6 +32,9 @@ setwd("c:/b/atp_stats")
 colour_highexposurescore <- "firebrick2"
 colour_mediumexposurescore <- "sienna2"
 colour_lowexposurescore <- "royalblue3"
+colour_highexposurescore_bg <- "rosybrown1"
+colour_mediumexposurescore_bg <- "navajowhite"
+colour_lowexposurescore_bg <- "lightskyblue1"
 colour_my_trust <- "darkorchid4"
 colour_average <- "black"
 colour_topquartile <- "darkgreen"
@@ -42,10 +46,14 @@ atp_stats_long_monthly <- readRDS("atp_stats_long_monthbymonth_server.rds")
 
 # MUNGE DATA ----
 
+# constrain data to fourteen months
+atp_stats_long_monthly <- subset(atp_stats_long_monthly, month > today() - months(17))
+
 # Set the various data strings we'll need
 current_month <- head(atp_stats_long_monthly$month, 1) # current month for label plotting
 current_month_print <- format(current_month, "%B %Y") # current month for title print
 first_month <- tail(atp_stats_long_monthly$month, 1) # first month for label plotting
+first_month_print <- format(first_month, "%B %Y") # first month for printing
 
 # CREATE DATA SUBSETS ----
 
@@ -87,15 +95,15 @@ plot_labels_right <- data.table(labels_right_x = labels_right_x, labels_right_y 
 # Create the plot
 atp_stats_plot <- ggplot() + 
   # background rectangles
-  annotate("rect", xmin = labels_left_x, xmax = current_month, ymin = -Inf, ymax = 29, fill = "lightskyblue1", alpha = .6, color = NA) +
-  annotate("rect", xmin = labels_left_x, xmax = current_month, ymin = 29, ymax = 69, fill = "navajowhite", alpha = .6, color = NA) +
-  annotate("rect", xmin = labels_left_x, xmax = current_month, ymin = 69, ymax = Inf, fill = "salmon1", alpha = .6, color = NA) +
+  annotate("rect", xmin = labels_left_x, xmax = current_month, ymin = -Inf, ymax = 29, fill = colour_lowexposurescore_bg, alpha = .6, color = NA) +
+  annotate("rect", xmin = labels_left_x, xmax = current_month, ymin = 29, ymax = 69, fill = colour_mediumexposurescore_bg, alpha = .6, color = NA) +
+  annotate("rect", xmin = labels_left_x, xmax = current_month, ymin = 69, ymax = Inf, fill = colour_highexposurescore_bg, alpha = .6, color = NA) +
   # background data
   geom_line(data = atp_stats_long_monthly, aes(x = month, y = cyber_score_server, group = ods, colour = ods), colour = alpha("grey68", 0.7)) + 
   # average line
   geom_line(data = averages, aes(x = month, y = cyber_score_mean), colour = colour_average, size = 1.5) +
   # My Trust line
-  geom_line(data = my_trust, aes(x = month, y = cyber_score_server, group = ods, colour = my_trust), colour = colour_my_trust, size = 2) +
+  geom_line(data = my_trust, aes(x = month, y = cyber_score_server, group = ods, colour = my_trust), colour = colour_my_trust, size = 3) +
   # top quartile line
   geom_line(data = topquartile, aes(x = month, y = top_quartile), colour = colour_topquartile, size = 1.5) +
   # exposure score lines
@@ -105,15 +113,15 @@ atp_stats_plot <- ggplot() +
   # left hand side labels
   geom_label(data = plot_labels_left, aes(x = labels_left_x, y = labels_left_y, label = labels_left_text, group = NULL, hjust = "left"), fill = plot_labels_left$labels_left_colour, colour = "white", fontface = "bold", size = 5, nudge_x = 10) +
   # right hand side labels
-  geom_label_repel(data = plot_labels_right, aes(x = labels_right_x, y = labels_right_y, label = labels_right_text, group = NULL, hjust = "left"), colour = plot_labels_right$labels_right_colour, fontface = "bold", size = 3, nudge_x = 2.5) +
+  geom_label(data = plot_labels_right, aes(x = labels_right_x, y = labels_right_y, label = labels_right_text, group = NULL, hjust = "left"), colour = plot_labels_right$labels_right_colour, fontface = "bold", size = 3, nudge_x = 2.5) +
   # axis settings
-  scale_x_date(date_labels = "%b %y", date_breaks = "2 months", expand = expansion(mult = c(0, .08))) +
+  scale_x_date(date_labels = "%b %y", date_breaks = "1 month", expand = expansion(mult = c(0, .08))) +
   scale_y_continuous(breaks = c(20, 40, 60, 80, 100), limits = c(0,100)) +
   # axis labels
   xlab("Month") +
   ylab("Exposure score") +
   # plot title and subtitle
-  ggtitle(paste("Cyber exposure scores for servers - NHS Trusts - May 2021 to", current_month_print, sep = " "), subtitle = "Data supplied by the NHS Digital Data Security Centre") +
+  ggtitle(paste("Cyber exposure scores for servers - NHS Trusts -", first_month_print,"to", current_month_print, sep = " "), subtitle = "Data supplied by the NHS England Cyber Security Operations Centre") +
   # plot theme
   theme_base() +
   theme(

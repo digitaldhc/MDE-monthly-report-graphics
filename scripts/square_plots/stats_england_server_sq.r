@@ -13,7 +13,7 @@ pacman::p_load(
   tidyr,
   ggplot2,
   dplyr,
-  zoo,
+#  zoo,
   data.table,
   ggrepel,
   ggthemes,
@@ -33,6 +33,9 @@ setwd("c:/b/atp_stats")
 colour_highexposurescore <- "firebrick2"
 colour_mediumexposurescore <- "sienna2"
 colour_lowexposurescore <- "royalblue3"
+colour_highexposurescore_bg <- "rosybrown1"
+colour_mediumexposurescore_bg <- "navajowhite"
+colour_lowexposurescore_bg <- "lightskyblue1"
 colour_my_trust <- "darkorchid4"
 colour_average <- "black"
 colour_topquartile <- "darkgreen"
@@ -92,9 +95,9 @@ plot_labels_right <- data.table(labels_right_x = labels_right_x, labels_right_y 
 # Create the plot
 atp_stats_plot <- ggplot() + 
   # background rectangles
-  annotate("rect", xmin = labels_left_x, xmax = current_month, ymin = -Inf, ymax = 29, fill = "lightskyblue1", alpha = .6, color = NA) +
-  annotate("rect", xmin = labels_left_x, xmax = current_month, ymin = 29, ymax = 69, fill = "navajowhite", alpha = .6, color = NA) +
-  annotate("rect", xmin = labels_left_x, xmax = current_month, ymin = 69, ymax = Inf, fill = "salmon1", alpha = .6, color = NA) +
+  annotate("rect", xmin = labels_left_x, xmax = current_month, ymin = -Inf, ymax = 29, fill = colour_lowexposurescore_bg, alpha = .6, color = NA) +
+  annotate("rect", xmin = labels_left_x, xmax = current_month, ymin = 29, ymax = 69, fill = colour_mediumexposurescore_bg, alpha = .6, color = NA) +
+  annotate("rect", xmin = labels_left_x, xmax = current_month, ymin = 69, ymax = Inf, fill = colour_highexposurescore_bg, alpha = .6, color = NA) +
   # background data
   geom_line(data = atp_stats_long_monthly, aes(x = month, y = cyber_score_server, group = ods, colour = ods), colour = alpha("grey68", 0.7)) + 
   # average line
@@ -118,7 +121,7 @@ atp_stats_plot <- ggplot() +
   xlab("Month") +
   ylab("Exposure score") +
   # plot title and subtitle
-  ggtitle(paste("Cyber exposure scores for servers<br>England NHS Trusts"), subtitle = "Data supplied by the NHS Digital Data Security Centre") +
+  ggtitle(paste("Cyber exposure scores for servers<br>England NHS Trusts"), subtitle = "Data supplied by the NHS England Cyber Security Operations Centre") +
   # plot theme
   theme_base() +
   theme(
